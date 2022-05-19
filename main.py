@@ -19,17 +19,11 @@ ua = ua.random
 import requests
 from bs4 import BeautifulSoup
 import lxml
+import json
 
-select_www = int(input('Select: 1 - "lae-show-results", 2 - "show-results" '))
 
-if select_www == 1:
-    url = 'https://www.nchacutting.com/ncha-shows/world-standings/lae-show-results'
-    save_path = './out/1/txt_'
-elif select_www == 2:
-    url = 'https://www.nchacutting.com/ncha-shows/world-standings/show-results'
-    save_path = './out/2/txt_'
-else:
-    print('No!!!!!!!!!!!!!!!!')
+url = 'https://www.pollutec.com/fr-fr/liste-exposants.html'
+
 
 headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -39,22 +33,21 @@ headers = {
 
 print('start...')
 
-options = webdriver.FirefoxOptions()
-options.set_preference("general.useragent.override", f"{ua}")
-
-s = Service('geckodriver.exe')
-
-driver = webdriver.Firefox(service=s, options=options)
-
-driver.implicitly_wait(1.5)
-driver.get(url)
-
-time.sleep(5)
-source_html = driver.page_source
-
-# # with requests.Session() as session:
-# #     response = session.get(url=url, headers=headers)
-
+# # 1
+# #
+# options = webdriver.FirefoxOptions()
+# options.set_preference("general.useragent.override", f"{ua}")
+#
+# s = Service('geckodriver.exe')
+#
+# driver = webdriver.Firefox(service=s, options=options)
+#
+# driver.implicitly_wait(1.5)
+# driver.get(url)
+#
+# time.sleep(5)
+# source_html = driver.page_source
+#
 # # # запись СПАРСЕНОЙ инфы в ХТМЛ-файл
 # with open('index.html', 'w', encoding='utf-8') as file:
 #     file.write(source_html)
@@ -62,8 +55,8 @@ source_html = driver.page_source
 
 # 2
 #
-# with open("index.html", "r", encoding='utf-8') as f:
-#     source_html = f.read()
+with open("index.html", "r", encoding='utf-8') as f:
+    source_html = f.read()
 
 soup = BeautifulSoup(source_html, 'lxml')
 
@@ -76,7 +69,19 @@ soup = BeautifulSoup(source_html, 'lxml')
 # with open('index2.html', 'w', encoding='utf-8') as file:
 #     file.write(source_html)
 
-tab_ = soup.find_all('div', class_='list-group-item small')
+tab_ = soup.find_all('h3', class_='text-center-mobile wrap-word')
+
+test = []
+
+for i in tab_:
+    test.append(i)
+
+print(len(test))
+
+# with open('test.json', 'w', encoding='utf-8') as file:
+#     json.dump(test, file, indent=4, ensure_ascii=False)
+
+breakpoint()
 
 
 def try_div():
