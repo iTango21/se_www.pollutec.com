@@ -8,6 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+# from selenium.Java
 import time
 from random import randrange
 from fake_useragent import UserAgent
@@ -33,30 +34,44 @@ headers = {
 
 print('start...')
 
-# # 1
-# #
-# options = webdriver.FirefoxOptions()
-# options.set_preference("general.useragent.override", f"{ua}")
+# 1
 #
-# s = Service('geckodriver.exe')
-#
-# driver = webdriver.Firefox(service=s, options=options)
-#
-# driver.implicitly_wait(1.5)
-# driver.get(url)
-#
-# time.sleep(5)
-# source_html = driver.page_source
-#
+options = webdriver.FirefoxOptions()
+options.set_preference("general.useragent.override", f"{ua}")
+
+s = Service('geckodriver.exe')
+
+driver = webdriver.Firefox(service=s, options=options)
+
+driver.implicitly_wait(1.5)
+driver.get(url)
+
+time.sleep(5)
+source_html = driver.page_source
+
 # # # запись СПАРСЕНОЙ инфы в ХТМЛ-файл
 # with open('index.html', 'w', encoding='utf-8') as file:
 #     file.write(source_html)
 
+# driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+for i in range(10):  # adjust integer value for need
+    # you can change right side number for scroll convenience or destination
+    driver.execute_script("window.scrollBy(0, 5000)")
+    # # запись СПАРСЕНОЙ инфы в ХТМЛ-файл
+    with open(f'index{i}.html', 'w', encoding='utf-8') as file:
+        file.write(source_html)
+    # you can change time integer to float or remove
+    time.sleep(1)
 
-# 2
-#
-with open("index.html", "r", encoding='utf-8') as f:
-    source_html = f.read()
+# time.sleep(5)
+driver.close()
+driver.quit()
+
+
+# # 2
+# #
+# with open("index.html", "r", encoding='utf-8') as f:
+#     source_html = f.read()
 
 soup = BeautifulSoup(source_html, 'lxml')
 
